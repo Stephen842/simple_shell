@@ -114,4 +114,9 @@ char **get_env(info_t *);
 int unset_env(info_t *, char *);
 int set_env(info_t *, char *, char *);
 
+/*getInfo.c */
+void cls_info(info_t *);
+void s_info(info_t *, char **);
+void set_free(info_t *, int);
+
 #endif
