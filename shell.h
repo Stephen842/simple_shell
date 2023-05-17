@@ -109,4 +109,9 @@ void *_realloc(void *, unsigned int, unsigned int);
 /*mem.c */
 int free_it(void **);
 
+/* get_envi.c */
+char **get_env(info_t *);
+int unset_env(info_t *, char *);
+int set_env(info_t *, char *, char *);
+
 #endif
