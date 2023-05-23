@@ -2,7 +2,7 @@
 
 /**
  * list_len - this function determines length of linked list
- * @h: parameter showing the pointer to first node
+ * @head: parameter showing the pointer to first node
  * Return: 0 if successful
  */
 size_t list_len(const list_t *head)
@@ -60,7 +60,7 @@ char **list_to_strings(list_t *head)
 }
 /**
  * print_list - this function prints all elements of a list_t linked list
- * @h: function parameter indicating the pointer to first node
+ * @head: function parameter indicating the pointer to first node
  * Return: 0 if successful
  */
 
@@ -86,7 +86,7 @@ size_t print_list(const list_t *head)
 /**
  * node_starts_with - this function searches for a node whose string start at a
  * given prefix and matches a character
- * @node: function parameter indicating the pointer to list head
+ * @head: function parameter indicating the pointer to list head
  * @prefix: function parameter indicating string to match
  * @c: function parameter showing the next character after prefix to match
  * Return: 0 if successful

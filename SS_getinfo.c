@@ -19,7 +19,7 @@ void clear_info(info_t *info)
 void set_info(info_t *info, char **av)
 {
 	int i;
-	
+
 	info->fname = av[0];
 	if (info->arg)
 	{
@@ -39,7 +39,7 @@ void set_info(info_t *info, char **av)
 
 		replace_alias(info);
 		replace_vars(info);
-	
+
 }
 /**
  * free_info - this function frees allocated memory and reset field in the info
@@ -50,7 +50,7 @@ void set_info(info_t *info, char **av)
 void free_info(info_t *info, int all)
 {
 	int i;
-	
+
 	if (info->argv)
 	{
 		for (i = 0; info->argv[i]; i++)
