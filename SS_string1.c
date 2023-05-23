@@ -13,6 +13,7 @@ if (dest == src || src == NULL)
 return (dest);
 
 while ((*dest++ = *src++))
+;
 return (ret);
 }
 
