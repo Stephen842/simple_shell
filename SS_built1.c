@@ -118,6 +118,7 @@ int _myalias(info_t *info)
 	if (info->argc == 1)
 	{
 		list_t *node = info->alias;
+
 		while (node != NULL)
 		{
 			print_alias(node);
