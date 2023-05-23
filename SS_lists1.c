@@ -7,16 +7,16 @@
  */
 size_t list_len(const list_t *head)
 {
-    size_t len = 0;
-    const list_t *node = head;
+	size_t len = 0;
+	const list_t *node = head;
 
-    while (node != NULL)
-    {
-        len++;
-        node = node->next;
-    }
+	while (node != NULL)
+	{
+		len++;
+		node = node->next;
+	}
 
-    return len;
+	return (len);
 }
 
 /**
@@ -28,35 +28,35 @@ size_t list_len(const list_t *head)
 
 char **list_to_strings(list_t *head)
 {
-    size_t len = list_len(head);
-    char **strs = NULL;
-    list_t *node = head;
-    size_t i = 0;
+	size_t len = list_len(head);
+	char **strs = NULL;
+	list_t *node = head;
+	size_t i = 0;
 
-    if (len == 0)
-        return NULL;
+	if (len == 0)
+		return (NULL);
 
-    strs = malloc(sizeof(char *) * (len + 1));
-    if (strs == NULL)
-        return NULL;
+	strs = malloc(sizeof(char *) * (len + 1));
+	if (strs == NULL)
+		return (NULL);
 
-    while (node != NULL)
-    {
-        strs[i] = _strdup(node->str);
-        if (strs[i] == NULL)
-        {
-            while (i > 0)
-                free(strs[--i]);
-            free(strs);
-            return NULL;
-        }
+	while (node != NULL)
+	{
+		strs[i] = _strdup(node->str);
+		if (strs[i] == NULL)
+		{
+			while (i > 0)
+				free(strs[--i]);
+			free(strs);
+			return (NULL);
+		}
 
-        node = node->next;
-        i++;
-    }
+		node = node->next;
+		i++;
+	}
 
-    strs[i] = NULL;
-        return strs;
+	strs[i] = NULL;
+	return (strs);
 }
 /**
  * print_list - this function prints all elements of a list_t linked list
@@ -66,21 +66,21 @@ char **list_to_strings(list_t *head)
 
 size_t print_list(const list_t *head)
 {
-    size_t len = list_len(head);
-    const list_t *node = head;
-    size_t i;
+	size_t len = list_len(head);
+	const list_t *node = head;
+	size_t i;
 
-    for (i = 0; i < len; i++)
-    {
-        _puts(convert_number(node->num, 10, 0));
-        _putchar(':');
-        _putchar(' ');
-        _puts(node->str ? node->str : "(nil)");
-        _puts("\n");
-        node = node->next;
-    }
+	for (i = 0; i < len; i++)
+	{
+		_puts(convert_number(node->num, 10, 0));
+		_putchar(':');
+		_putchar(' ');
+		_puts(node->str ? node->str : "(nil)");
+		_puts("\n");
+		node = node->next;
+	}
 
-    return len;
+	return (len);
 }
 
 /**
@@ -94,17 +94,17 @@ size_t print_list(const list_t *head)
 
 list_t *node_starts_with(list_t *head, char *prefix, char c)
 {
-    list_t *node = head;
+	list_t *node = head;
 
-    while (node != NULL)
-    {
-        if (starts_with(node->str, prefix) && (c == -1 || node->str[_strlen(prefix)] == c))
-            return node;
+	while (node != NULL)
+	{
+		if (starts_with(node->str, prefix) && (c == -1 || node->str[_strlen(prefix)] == c))
+		return (node);
 
-        node = node->next;
-    }
+		node = node->next;
+	}
 
-    return NULL;
+	return (NULL);
 }
 
 /**
@@ -115,18 +115,18 @@ list_t *node_starts_with(list_t *head, char *prefix, char c)
  */
 ssize_t get_node_index(list_t *head, list_t *node)
 {
-    size_t index = 0;
-    list_t *current = head;
+	size_t index = 0;
+	list_t *current = head;
 
-    while (current != NULL)
-    {
-        if (current == node)
-            return index;
+	while (current != NULL)
+	{
+		if (current == node)
+			return (index);
 
-        current = current->next;
-        index++;
-    }
+		current = current->next;
+		index++;
+	}
 
-    return -1;
+	return (-1);
 }
 

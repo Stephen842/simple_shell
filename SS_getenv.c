@@ -6,15 +6,16 @@
  */
 void free_string_array(char **array)
 {
-    size_t i;
-    if (array)
-    {
-        for (i = 0; array[i]; i++)
-        {
-            free(array[i]);
-        }
-        free(array);
-    }
+	size_t i;
+
+	if (array)
+	{
+		for (i = 0; array[i]; i++)
+		{
+			free(array[i]);
+		}
+		free(array);
+	}
 }
 
 /**
@@ -24,35 +25,36 @@ void free_string_array(char **array)
  */
 char **create_string_array(list_t *head)
 {
-    size_t size = 0;
-    list_t *node = head;
-    char **array = NULL;
-    size_t i;
-    while (node)
-    {
-        size++;
-        node = node->next;
-    }
+	size_t size = 0;
+	list_t *node = head;
+	char **array = NULL;
+	size_t i;
 
-    array = malloc((size + 1) * sizeof(char *));
-    if (!array)
-        return NULL;
+	while (node)
+	{
+		size++;
+		node = node->next;
+	}
 
-    node = head;
-    for (i = 0; i < size; i++)
-    {
-        array[i] = _strdup(node->str);
-        if (!array[i])
-        {
-            free_string_array(array);
-            return NULL;
-        }
-        node = node->next;
-    }
+	array = malloc((size + 1) * sizeof(char *));
+	if (!array)
+		return (NULL);
 
-    array[size] = NULL;
+	node = head;
+	for (i = 0; i < size; i++)
+	{
+		array[i] = _strdup(node->str);
+		if (!array[i])
+		{
+			free_string_array(array);
+			return (NULL);
+		}
+		node = node->next;
+	}
 
-    return array;
+	array[size] = NULL;
+
+	return (array);
 }
 
 /**
@@ -63,17 +65,17 @@ char **create_string_array(list_t *head)
  */
 char **get_environ(info_t *info)
 {
-        char **environ_copy;
+	char **environ_copy;
 
-        if (!info->environ || info->env_changed)
-        {
-                free_string_array(info->environ);
-                environ_copy = create_string_array(info->env);
-                info->environ = environ_copy;
-                info->env_changed = 0;
-        }
+	if (!info->environ || info->env_changed)
+	{
+		free_string_array(info->environ);
+		environ_copy = create_string_array(info->env);
+		info->environ = environ_copy;
+		info->env_changed = 0;
+	}
 
-        return info->environ;
+	return (info->environ);
 }
 
 /**
@@ -85,27 +87,27 @@ char **get_environ(info_t *info)
  */
 int _unsetenv(info_t *info, char *var)
 {
-        list_t *node = info->env;
-        size_t i = 0;
-        char *p;
+	list_t *node = info->env;
+	size_t i = 0;
+	char *p;
 
-        if (!node || !var)
-                return 0;
+	if (!node || !var)
+		return (0);
 
-        while (node)
-        {
-                p = starts_with(node->str, var);
-                if (p && *p == '=')
-                {
-                        info->env_changed = delete_node_at_index(&(info->env), i);
-                        i = 0;
-                        node = info->env;
-                        continue;
-                }
-                node = node->next;
-                i++;
-        }
-        return info->env_changed;
+	while (node)
+	{
+		p = starts_with(node->str, var);
+		if (p && *p == '=')
+		{
+			info->env_changed = delete_node_at_index(&(info->env), i);
+			i = 0;
+			node = info->env;
+			continue;
+		}
+		node = node->next;
+		i++;
+	}
+	return (info->env_changed);
 }
 
 /**
@@ -118,36 +120,35 @@ int _unsetenv(info_t *info, char *var)
  */
 int _setenv(info_t *info, char *var, char *value)
 {
-        char *new_env;
-        list_t *node;
-        char *p;
+	char *new_env;
+	list_t *node;
+	char *p;
 
-        if (!var || !value)
-                return 1;
+	if (!var || !value)
+		return (1);
 
-        new_env = malloc(_strlen(var) + _strlen(value) + 2);
-        if (!new_env)
-                return 1;
-        _strcpy(new_env, var);
-        _strcat(new_env, "=");
-        _strcat(new_env, value);
+	new_env = malloc(_strlen(var) + _strlen(value) + 2);
+	if (!new_env)
+		return (1);
+	_strcpy(new_env, var);
+	_strcat(new_env, "=");
+	_strcat(new_env, value);
 
-        node = info->env;
-        while (node)
-        {
-                p = starts_with(node->str, var);
-                if (p && *p == '=')
-                {
-                        free(node->str);
-                        node->str = new_env;
-                        info->env_changed = 1;
-                        return 0;
-                }
-                node = node->next;
-        }
+	node = info->env;
+	while (node)
+	{
+		p = starts_with(node->str, var);
+		if (p && *p == '=')
+		{
+			free(node->str);
+			node->str = new_env;
+			info->env_changed = 1;
+			return (0);
+		}
+		node = node->next;
+	}
 
-        add_node_end(&(info->env), new_env, 0);
-        info->env_changed = 1;
-        return 0;
+	add_node_end(&(info->env), new_env, 0);
+	info->env_changed = 1;
+	return (0);
 }
-
