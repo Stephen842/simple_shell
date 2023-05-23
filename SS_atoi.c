@@ -8,7 +8,7 @@
  */
 int interactive(info_t *info)
 {
-    return (isatty(STDIN_FILENO) && info->readfd <= 2);
+	return (isatty(STDIN_FILENO) && info->readfd <= 2);
 }
 
 /**
@@ -20,13 +20,13 @@ int interactive(info_t *info)
  */
 int is_delim(char c, char *delim)
 {
-    while (*delim != '\0')
-    {
-        if (c == *delim)
-            return 1;
-        delim++;
-    }
-    return 0;
+	while (*delim != '\0')
+	{
+		if (c == *delim)
+			return (1);
+			delim++;
+	}
+	return (0);
 }
 
 /**
