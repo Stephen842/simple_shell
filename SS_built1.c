@@ -112,37 +112,38 @@ return (1);
  */
 int _myalias(info_t *info)
 {
-int i;
-char *p;
+	int i;
+	char *p;
 
-if (info->argc == 1)
-{
-list_t *node = info->alias;
-while (node != NULL)
-{
-print_alias(node);
-node = node->next;
-}
-return (0);
-}
+	if (info->argc == 1)
+	{
+		list_t *node = info->alias;
+		while (node != NULL)
+		{
+			print_alias(node);
+			node = node->next;
+		}
+		return (0);
+	}
 
-for (i = 1; info->argv[i] != NULL; i++)
-{
-p = _strchr(info->argv[i], '=');
-if (p != NULL)
-{
-*p = '\0';
-unset_alias(info, info->argv[i]);
-*p = '=';
-set_alias(info, info->argv[i]);
+	for (i = 1; info->argv[i] != NULL; i++)
+	{
+		p = _strchr(info->argv[i], '=');
+		if (p != NULL)
+		{
+			*p = '\0';
+			unset_alias(info, info->argv[i]);
+			*p = '=';
+			set_alias(info, info->argv[i]);
 
-}
-else
-{
-print_alias(node_starts_with(info->alias, info->argv[i], '='));
+		}
+		else
+		{
+			print_alias(node_starts_with(info->alias, info->argv[i], '='));
 
-}
+		}
 
-return (0);
+		return (0);
+	}
 }
 

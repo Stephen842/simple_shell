@@ -48,7 +48,7 @@ return (ret);
 void _puts(char *str)
 {
 if (str == NULL)
-return ();
+return;
 while (*str)
 putchar(*str++);
 }

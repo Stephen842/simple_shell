@@ -8,7 +8,7 @@ void _eputs(char *str)
 {
 int i = 0;
 if (!str)
-return ();
+return;
 
 while (str[i] != '\0')
 {
