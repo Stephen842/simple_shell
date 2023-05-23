@@ -1,9 +1,10 @@
 #include "main.h"
 
 /**
- * interactive - This program returns true if the shell is in interactive mode.
- * @info: This function parameter indicates the struct address.
- * Return: 1 if the shell is interactive, else 0.
+ * interactive - This function returns true if the shell is in interactive mode.
+ * @info: The struct address.
+ *
+ * Return: 1 if the shell is interactive, 0 otherwise.
  */
 int interactive(info_t *info)
 {
@@ -11,10 +12,11 @@ int interactive(info_t *info)
 }
 
 /**
- * is_delim - This function checks if a given character c is a delimiter.
- * @c: Function parameter of the character to check.
- * @delim: Function parameter of the delimiter string.
- * Return: 1 if successful, else 0.
+ * is_delim - This function checks if a given character is a delimiter.
+ * @c: The character to check.
+ * @delim: The delimiter string.
+ *
+ * Return: 1 if the character is a delimiter, 0 otherwise.
  */
 int is_delim(char c, char *delim)
 {
@@ -29,8 +31,9 @@ int is_delim(char c, char *delim)
 
 /**
  * _isalpha - This function checks if a character is an alphabet.
- * @c: Function parameter of the character to be checked.
- * Return: 1 if successful, else 0.
+ * @c: The character to be checked.
+ *
+ * Return: 1 if the character is an alphabet, 0 otherwise.
  */
 int _isalpha(int c)
 {
@@ -41,9 +44,10 @@ int _isalpha(int c)
 }
 
 /**
- * _atoi - Function that converts a string to an integer.
- * @s: String to be converted to an integer.
- * Return: 0 if successful.
+ * _atoi - This function converts a string to an integer.
+ * @s: The string to be converted.
+ *
+ * Return: The converted integer.
  */
 int _atoi(char *s)
 {
@@ -55,7 +59,6 @@ int _atoi(char *s)
     {
         if (*s == '-')
             sign *= -1;
-
         if (*s >= '0' && *s <= '9')
         {
             flag = 1;
