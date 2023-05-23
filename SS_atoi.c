@@ -1,23 +1,21 @@
 #include "main.h"
 
 /**
- * interactive - this program returns true if the shell is in interactive mode
- * @info: this function parameter indicate the struct address
- * Return: 1 if the shell is interactive, else otherwise
+ * interactive - This program returns true if the shell is in interactive mode.
+ * @info: This function parameter indicates the struct address.
+ * Return: 1 if the shell is interactive, else 0.
  */
-
 int interactive(info_t *info)
 {
-        return (isatty(STDIN_FILENO) && info->readfd <= 2);
+    return (isatty(STDIN_FILENO) && info->readfd <= 2);
 }
 
 /**
- * is_delim - this function check if a given character c is a delimiter
- * @c: function parameter of the character to check
- * @delim: function parameter of the delimiter string
- * Return: 1 if successful, else 0
+ * is_delim - This function checks if a given character c is a delimiter.
+ * @c: Function parameter of the character to check.
+ * @delim: Function parameter of the delimiter string.
+ * Return: 1 if successful, else 0.
  */
-
 int is_delim(char c, char *delim)
 {
     while (*delim != '\0')
@@ -30,9 +28,9 @@ int is_delim(char c, char *delim)
 }
 
 /**
- * _isalpha - this function checks if a character is an alphabet
- * @c: function parameter of the character to be checked
- * Return: 1 if successful else 0
+ * _isalpha - This function checks if a character is an alphabet.
+ * @c: Function parameter of the character to be checked.
+ * Return: 1 if successful, else 0.
  */
 int _isalpha(int c)
 {
@@ -43,9 +41,9 @@ int _isalpha(int c)
 }
 
 /**
- * _atoi - function that convert a string to an interger.
- * @s: string to be converted to an interger
- * Return: 0 if successful
+ * _atoi - Function that converts a string to an integer.
+ * @s: String to be converted to an integer.
+ * Return: 0 if successful.
  */
 int _atoi(char *s)
 {
@@ -57,7 +55,8 @@ int _atoi(char *s)
     {
         if (*s == '-')
             sign *= -1;
-if (*s >= '0' && *s <= '9')
+
+        if (*s >= '0' && *s <= '9')
         {
             flag = 1;
             result = result * 10 + (*s - '0');
