@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 /**
  * interactive - this program returns true if the shell is in interactive mode
  * @info: this function parameter indicate the struct address

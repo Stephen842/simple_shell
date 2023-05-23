@@ -31,7 +31,7 @@ implementing the cd builtin command that help in changing the current directory
 handle environment seperator
 
 it will handle the && and || logical operators
-implement the built in alias command 
+implement the built in alias command
 can handle variable replacement
 handle comment
 and lastly can be able to take file as an input.
