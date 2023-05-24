@@ -8,8 +8,8 @@
  */
 int hsh(info_t *info, char **av)
 {
-	ssize_t r = 0;
 	int builtin_ret = 0;
+	ssize_t r = 0;
 
 	while (r != -1 && builtin_ret != -2)
 	{
@@ -79,8 +79,8 @@ int find_builtin(info_t *info)
  */
 void find_cmd(info_t *info)
 {
-	char *path = NULL;
 	int i, k;
+	char *path = NULL;
 
 	info->path = info->argv[0];
 	if (info->linecount_flag == 1)
@@ -104,7 +104,7 @@ void find_cmd(info_t *info)
 	{
 		if ((interactive(info) || _getenv(info, "PATH=")
 					|| info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
-		fork_cmd(info);
+			fork_cmd(info);
 		else if (*(info->arg) != '\n')
 		{
 			info->status = 127;

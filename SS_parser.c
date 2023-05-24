@@ -8,13 +8,16 @@
  */
 int is_cmd(info_t *info, char *path)
 {
-struct stat st;
+	struct stat st;
 
-(void)info;
-if (!path || stat(path, &st) != 0)
-return (0);
+	(void)info;
+	
+	if (!path || stat(path, &st))
+		return (0);
 
-return (S_ISREG(st.st_mode));
+	if (S_IFREG & st.st_mode)
+		return (1);
+	return (0);
 }
 
 /**
@@ -28,16 +31,16 @@ return (S_ISREG(st.st_mode));
 
 char *dup_chars(char *pathstr, int start, int stop)
 {
-int length = stop - start;
-char *buf = malloc((length + 1) * sizeof(char));
-int i;
-if (buf == NULL)
-return (NULL);
+	int len = 0;
+	static char buf[1024];
+	int a = 0,
 
-for (i = 0; i < length; i++)
-buf[i] = pathstr[start + i];
-buf[length] = '\0';
-return (buf);
+	for (len = 0, a = start; a < stop; a++)
+		if (pathstr[a] != ':')
+			buf[len++] = pathstr[a];
+	buf[len] = 0;
+	return (buf);
+
 }
 /**
  * find_path - this function searches for a cmd in the PATH string
@@ -49,44 +52,38 @@ return (buf);
 
 char *find_path(info_t *info, char *pathstr, char *cmd)
 {
-int start = 0;
-int i = 0;
-char *path = NULL;
+	int a = 0;
+	char *path;
+	int Curr = 0;
 
-if (!pathstr)
-return (NULL);
+	if (!pathstr)
+		return (NULL);
+	if ((_strlen(cmd) > 2) && starts_with(cmd, "./"))
+	{
+		if (is_cmd(info, cmd))
+			return (cmd);
+	}
+	while (1)
+	{
+		if (!pathstr[a] || pathstr[a] == ':')
+		{
+			path = dup_chars(pathstr, Curr, a);
+			if (!*path)
+				_strcat(path, cmd);
+			else
+			{
+				_strcat(path, "/");
+				_strcat(path, cmd);
+			}
+			if (is_cmd(info, path))
+				return (path);
+			if (!pathstr[a])
+				break;
+			Curr = a;
+		}
+		a++;
+	}
+	return (NULL);
 
-if (_strlen(cmd) > 2 && starts_with(cmd, "./"))
-{
-if (is_cmd(info, cmd))
-return (cmd);
-}
-
-while (pathstr[i] != '\0')
-{
-if (pathstr[i] == ':')
-{
-path = dup_chars(pathstr, start, i);
-if (path == NULL)
-return (NULL);
-
-if (_strlen(path) == 0)
-_strcat(path, cmd);
-else
-{
-_strcat(path, "/");
-_strcat(path, cmd);
-}
-
-if (is_cmd(info, path))
-return (path);
-
-start = i + 1;
-}
-
-i++;
-
-}
-return (NULL);
 }
 

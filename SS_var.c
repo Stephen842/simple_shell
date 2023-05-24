@@ -14,19 +14,19 @@ int is_chain(info_t *info, char *buf, size_t *p)
 
 	if (buf[j] == '|' && buf[j + 1] == '|')
 	{
-		buf[j] = '\0';
+		buf[j] = 0;
 		j++;
 		info->cmd_buf_type = CMD_OR;
 	}
 	else if (buf[j] == '&' && buf[j + 1] == '&')
 	{
-		buf[j] = '\0';
+		buf[j] = 0;
 		j++;
 		info->cmd_buf_type = CMD_AND;
 	}
-	else if (buf[j] == ';') /* found end of this command */
+	else if (buf[j] == ';') /* found the end of the command */
 	{
-		buf[j] = '\0'; /* replace semicolon with null */
+		buf[j] = 0; /* set semicolon to null */
 		info->cmd_buf_type = CMD_CHAIN;
 	}
 	else
@@ -50,12 +50,12 @@ void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
 
 	if (info->cmd_buf_type == CMD_AND && info->status)
 	{
-		buf[i] = '\0';
+		buf[i] = 0;
 		j = len;
 	}
 	else if (info->cmd_buf_type == CMD_OR && !info->status)
 	{
-		buf[i] = '\0';
+		buf[i] = 0;
 		j = len;
 	}
 
@@ -95,8 +95,8 @@ int replace_alias(info_t *info)
  */
 int replace_vars(info_t *info)
 {
-	int i;
 	list_t *node;
+	int i;
 
 	for (i = 0; info->argv[i]; i++)
 	{
@@ -113,13 +113,13 @@ int replace_vars(info_t *info)
 			replace_string(&(info->argv[i]), _strdup(convert_number(getpid(), 10, 0)));
 			continue;
 		}
-		node = node_starts_with(info->env, &(info->argv[i][1]), '=');
+		node = node_starts_with(info->env, &info->argv[i][1], '=');
 		if (node)
 		{
 			replace_string(&(info->argv[i]), _strdup(_strchr(node->str, '=') + 1));
 		continue;
 		}
-		replace_string(&(info->argv[i]), _strdup(""));
+		replace_string(&info->argv[i], _strdup(""));
 	}
 	return (0);
 }

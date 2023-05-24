@@ -1,63 +1,6 @@
 #include "shell.h"
 
 /**
- * free_string_array - Frees a string array and its contents
- * @array: The string array to free
- */
-void free_string_array(char **array)
-{
-	size_t i;
-
-	if (array)
-	{
-		for (i = 0; array[i]; i++)
-		{
-			free(array[i]);
-		}
-		free(array);
-	}
-}
-
-/**
- * create_string_array - Creates a string array from a linked list
- * @head: The head of the linked list
- * Return: The created string array
- */
-char **create_string_array(list_t *head)
-{
-	size_t size = 0;
-	list_t *node = head;
-	char **array = NULL;
-	size_t i;
-
-	while (node)
-	{
-		size++;
-		node = node->next;
-	}
-
-	array = malloc((size + 1) * sizeof(char *));
-	if (!array)
-		return (NULL);
-
-	node = head;
-	for (i = 0; i < size; i++)
-	{
-		array[i] = _strdup(node->str);
-		if (!array[i])
-		{
-			free_string_array(array);
-			return (NULL);
-		}
-		node = node->next;
-	}
-
-	array[size] = NULL;
-
-	return (array);
-}
-
-/**
  * get_environ - returns the string array copy of our environ
  * @info: Structure containing potential arguments. Used to maintain
  *          constant function prototype.
@@ -65,13 +8,10 @@ char **create_string_array(list_t *head)
  */
 char **get_environ(info_t *info)
 {
-	char **environ_copy;
 
 	if (!info->environ || info->env_changed)
 	{
-		free_string_array(info->environ);
-		environ_copy = create_string_array(info->env);
-		info->environ = environ_copy;
+		info->environ = list_to_strings(info->env);
 		info->env_changed = 0;
 	}
 
@@ -125,7 +65,7 @@ int _setenv(info_t *info, char *var, char *value)
 	char *p;
 
 	if (!var || !value)
-		return (1);
+		return (0);
 
 	new_env = malloc(_strlen(var) + _strlen(value) + 2);
 	if (!new_env)
@@ -149,6 +89,7 @@ int _setenv(info_t *info, char *var, char *value)
 	}
 
 	add_node_end(&(info->env), new_env, 0);
+	free(new_env);
 	info->env_changed = 1;
 	return (0);
 }
