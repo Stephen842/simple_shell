@@ -76,20 +76,19 @@ size_t print_list(const list_t *h)
 		h = h->next;
 		a++;
 	}
-
 	return (a);
 }
 
 /**
  * node_starts_with - this function searches for a node whose string start at a
  * given prefix and matches a character
- * @head: function parameter indicating the pointer to list head
+ * @node: function parameter indicating the pointer to list head
  * @prefix: function parameter indicating string to match
  * @c: function parameter showing the next character after prefix to match
  * Return: 0 if successful
  */
 
-list_t *node_starts_with(list_t *head, char *prefix, char c)
+list_t *node_starts_with(list_t *node, char *prefix, char c)
 {
 	char *a = NULL;
 
