@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "shell.h"
+
 /**
  * _myhistory - this function is responsible for showing the shell cmd history
  * @info: function parameter indicating a Struct containing potential arguments
@@ -8,17 +9,8 @@
 
 int _myhistory(info_t *info)
 {
-list_t *node = info->history;
-int count = 0;
-
-while (node != NULL)
-{
-printf("%d %s\n", count, node->str);
-node = node->next;
-count++;
-}
-
-return (0);
+	print_list(info->history);
+	return (0);
 }
 
 /**
@@ -30,28 +22,19 @@ return (0);
 
 int unset_alias(info_t *info, char *str)
 {
-list_t **head = &(info->alias);
-list_t *current = *head;
-list_t *prev = NULL;
+	char *a;
+	char b;
+	int c;
 
-while (current != NULL)
-{
-if (_strcmp(current->str, str) == 0)
-{
-if (prev == NULL)
-*head = current->next;
-else
-prev->next = current->next;
-
-free(current->str);
-free(current);
-return (0);
-}
-
-prev = current;
-current = current->next;
-}
-return (1);
+	a = _strchr(str, '=');
+	if (!a)
+		return (1);
+	b = *a;
+	*a = 0;
+	c = delete_node_at_index(&(info->alias),
+		get_node_index(info->alias, node_starts_with(info->alias, str, -1)));
+	*a = b;
+	return (c);
 }
 
 /**
@@ -63,32 +46,17 @@ return (1);
 
 int set_alias(info_t *info, char *str)
 {
-list_t *new_node = malloc(sizeof(list_t));
-list_t **head = &(info->alias);
-list_t *current = *head;
+	char *b;
 
-if (new_node == NULL)
-return (1);
+	b = _strchr(str, '=');
+	if (!b)
+		return (1);
+	if (!*++b)
+		return (unset_alias(info, str));
 
-new_node->str = _strdup(str);
-if (new_node->str == NULL)
-{
-free(new_node);
-return (1);
-}
-new_node->next = NULL;
-if (current == NULL)
-{
-*head = new_node;
-}
-else
-{
-while (current->next != NULL)
-current = current->next;
+	unset_alias(info, str);
+	return (add_node_end(&(info->alias), str, 0) == NULL);
 
-current->next = new_node;
-}
-return (0);
 }
 /**
  * print_alias - this function prints an individual alias from the alias list
@@ -98,12 +66,21 @@ return (0);
 
 int print_alias(list_t *node)
 {
-if (node != NULL)
-{
-printf("%s\n", node->str);
-return (0);
-}
-return (1);
+	char *d = NULL;
+	char *c = NULL;
+
+	if (node)
+	{
+		d = _strchr(node->str, '=');
+		for (d = node->str; c <= d; c++)
+		_putchar(*c);
+		_putchar('\'');
+		_puts(d + 1);
+		_puts("'\n");
+		return (0);
+	}
+	return (1);
+
 }
 /**
  * _myalias - this function mimic the behaivour of the alias builtin command
@@ -119,7 +96,7 @@ int _myalias(info_t *info)
 	{
 		list_t *node = info->alias;
 
-		while (node != NULL)
+		while (node)
 		{
 			print_alias(node);
 			node = node->next;
@@ -127,14 +104,11 @@ int _myalias(info_t *info)
 		return (0);
 	}
 
-	for (i = 1; info->argv[i] != NULL; i++)
+	for (i = 1; info->argv[i]; i++)
 	{
 		p = _strchr(info->argv[i], '=');
-		if (p != NULL)
+		if (p)
 		{
-			*p = '\0';
-			unset_alias(info, info->argv[i]);
-			*p = '=';
 			set_alias(info, info->argv[i]);
 
 		}
