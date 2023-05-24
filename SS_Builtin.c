@@ -7,18 +7,20 @@
  */
 int _myexit(info_t *info)
 {
-	int exitcheck;
+	int exit_check;
 
-	if (info->argv[1]) /* If there is an exit argument */
+	if (info->argv[1])
 	{
-		exitcheck = atoi(info->argv[1]);
-		if (exitcheck == 0 && strcmp(info->argv[1], "0") != 0)
+		exit_check = erratoi(info->argv[1]);
+		if (exit_check == -1)
 		{
 			info->status = 2;
-			fprintf(stderr, "Illegal number: %s\n", info->argv[1]);
+			_eputs(info->argv[1]);
+			print_error(info, "number not allowed: ");
+			_eputchar('\n');
 			return (1);
 		}
-		info->err_num = exitcheck;
+		info->err_num = erratoi(info->argv[1]);
 		return (-2);
 	}
 	info->err_num = -1;
@@ -38,37 +40,41 @@ int _mycd(info_t *info)
 	int chdir_ret;
 
 	if (!s)
-		fprintf(stderr, "TODO: >>getcwd failure emsg here<<\n");
+		_puts("TODO: >>getcwd failure emsg here<<\n");
 	if (!info->argv[1])
 	{
-		dir = getenv("HOME");
+		dir = _getenv(info, "HOME=");
 		if (!dir)
-			chdir_ret = chdir((dir = getenv("PWD")) ? dir : "/");
+			chdir_ret = chdir((dir = _getenv(info, "PWD=")) ? dir : "/");
 		else
 			chdir_ret = chdir(dir);
 	}
-	else if (strcmp(info->argv[1], "-") == 0)
+	else if (_strcmp(info->argv[1], "-") == 0)
 	{
-		dir = getenv("OLDPWD");
-		if (!dir)
+		if (!_getenv(info, "OLDPWD="))
 		{
-			printf("%s\n", s);
+			_puts(s);
+			_putchar('\n');
 			return (1);
 		}
-		printf("%s\n", dir);
-		chdir_ret = chdir(dir ? dir : "/");
+		_puts(_getenv(info, "OLDPWD=")), _putchar('\n');
+		chdir_ret = chdir((dir = _getenv(info, "OLDPWD=")) ? dir : "/");
 	}
 	else
 		chdir_ret = chdir(info->argv[1]);
-
 	if (chdir_ret == -1)
-		fprintf(stderr, "can't cd to %s\n", info->argv[1]);
+	{
+		print_error(info, "cannot cd to ");
+		_eputs(info->argv[1]), _eputchar('\n');
+	}
 	else
 	{
-		setenv("OLDPWD", getenv("PWD"), 1);
-		setenv("PWD", getcwd(buffer, 1024), 1);
+		_setenv(info, "OLDPWD", _getenv(info, "PWD="));
+		_setenv(info, "PWD", getcwd(buffer, 1024));
 	}
 	return (0);
+}
+
 }
 
 /**
@@ -80,9 +86,9 @@ int _myhelp(info_t *info)
 {
 	char **arg_array = info->argv;
 
-	printf("help call works. Function not yet implemented\n");
+	_puts("help call works. Function not yet implemented\n");
 	if (0)
-		printf("%s\n", *arg_array); /* temp att_unused workaround */
+		_puts(*arg_array);
 	return (0);
 }
 
