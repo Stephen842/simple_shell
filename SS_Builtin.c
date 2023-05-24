@@ -75,8 +75,6 @@ int _mycd(info_t *info)
 	return (0);
 }
 
-}
-
 /**
  * _myhelp - This function handles the help command in the shell.
  * @info: Parameter containing potential arguments.

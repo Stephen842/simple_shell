@@ -14,8 +14,8 @@ char *get_history_file(info_t *info)
 	if (!d)
 		return (NULL);
 
-	b = malloc(sizeof(char) * (strlen(dir) + strlen(HIST_FILE) + 2));
-	if (!)
+	b = malloc(sizeof(char) * (strlen(d) + strlen(HIST_FILE) + 2));
+	if (!b)
 		return (NULL);
 	b[0] = 0;
 	_strcpy(b, d);
@@ -62,7 +62,7 @@ int read_history(info_t *info)
 {
 	int i;
 	int last = 0;
-	linecount = 0;
+	int linecount = 0;
 	ssize_t fd;
 	ssize_t rdlen;
 	ssize_t fsize = 0;
