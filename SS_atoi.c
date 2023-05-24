@@ -17,13 +17,12 @@ return (isatty(STDIN_FILENO) && info->readfd <= 2);
  */
 int is_delim(char c, char *delim)
 {
-while (*delim != '\0')
-{
-if (c == *delim)
-return (1);
-delim++;
-}
-return (0);
+	while (*delim)
+	{
+		if (c == *delim++)
+			return (1);
+	}
+	return (0);
 }
 
 /**
@@ -33,10 +32,10 @@ return (0);
  */
 int _isalpha(int c)
 {
-if (isalpha(c))
-return (1);
-else
-return (0);
+	if (isalpha(c))
+		return (1);
+	else
+		return (0);
 }
 
 /**
@@ -46,27 +45,32 @@ return (0);
  */
 int _atoi(char *s)
 {
-int sign = 1;
-int result = 0;
-int flag = 0;
+	int a;
+	int sign = 1;
+	int f = 0;
+	int output;
+	unsigned int res = 0;
 
-while (*s != '\0' && flag != 2)
-{
-if (*s == '-')
-sign *= -1;
-if (*s >= '0' && *s <= '9')
-{
-flag = 1;
-result = result * 10 + (*s - '0');
-}
-else if (flag == 1)
-flag = 2;
-s++;
-}
+	for (a = 0; s[a] != '\0' && f != 2; a++)
+	{
+		if (s[a] == '-')
+			sign *= -1;
 
-if (sign == -1)
-result = -result;
+		if (s[a] >= '0' && s[a] <= '9')
+		{
+			f = 1;
+			res *= 10;
+			res += (s[a] - '0');
+		}
+		else if (f == 1)
+			f = 2;
+	}
 
-return (result);
+	if (sign == -1)
+		output = -res;
+	else
+		output = res;
+
+	return (output);
 }
 
