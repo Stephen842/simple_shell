@@ -7,25 +7,25 @@
  */
 int _erratoi(char *s)
 {
-int i = 0;
-unsigned long int result = 0;
+	unsigned long int result = 0;
+	int a = 0;
 
-if (*s == '+')
-s++;
+	if (*s == '+')
+		s++;
 
-for (i = 0; s[i] != '\0'; i++)
-{
-if (s[i] >= '0' && s[i] <= '9')
-{
-result *= 10;
-result += (s[i] - '0');
-if (result > INT_MAX)
-return (-1);
-}
-else
-return (-1);
-}
-return ((int)result);
+	for (a = 0; s[a] != '\0'; a++)
+	{
+		if (s[a] >= '0' && s[a] <= '9')
+		{
+			result *= 10;
+			result += (s[a] - '0');
+			if (result > INT_MAX)
+				return (-1);
+		}
+		else
+			return (-1);
+	}
+	return (result);
 }
 /**
  * print_error - this function print an error message
@@ -35,14 +35,15 @@ return ((int)result);
  */
 void print_error(info_t *info, char *estr)
 {
-_eputs(info->fname);
-_eputs(": ");
-print_d(info->line_count, STDERR_FILENO);
-_eputs(": ");
-_eputs(info->argv[0]);
-_eputs(": ");
-_eputs(estr);
+	_eputs(info->fname);
+	_eputs(": ");
+	print_d(info->line_count, STDERR_FILENO);
+	_eputs(": ");
+	_eputs(info->argv[0]);
+	_eputs(": ");
+	_eputs(estr);
 }
+
 /**
  * print_d - this function print a decimal number to a file descriptor
  * @input: parameter showing the input
@@ -51,31 +52,37 @@ _eputs(estr);
  */
 int print_d(int input, int fd)
 {
-int (*__putchar)(char) = _putchar;
-int count = 0;
-unsigned int _abs_, current;
+	int (*__putchar)(char) = _putchar;
+	int a;
+	unsigned int _abs_;
+	int counted = 0;
+	unsigned int current;
 
-if (fd == STDERR_FILENO)
-__putchar = _eputchar;
+	if (fd == STDERR_FILENO)
+		__putchar = _eputchar;
+	if (input < 0)
+	{
+		_abs_ = -input;
+		__putchar('-');
+		counted++;
+	}
+	else
+		_abs_ = input;
+	current = _abs_;
+	for (a = 1000000000; a > 1; a /= 10)
+	{
+		if (_abs_ / a)
+		{
+			__putchar('0' + current / a);
+			counted++;
+		}
+		current %= a;
+	}
+	__putchar('0' + current);
+	counted++;
 
-if (input < 0)
-{
-_abs_ = (unsigned int)(-input);
-__putchar('-');
-count++;
-}
-else
-_abs_ = (unsigned int)input;
+	return (counted);
 
-current = _abs_;
-
-if (current >= 10)
-count += print_d(current / 10, fd);
-
-__putchar('0' + (current % 10));
-count++;
-
-return (count);
 }
 /**
  * convert_number - this function convert a number to a string
@@ -86,30 +93,30 @@ return (count);
  */
 char *convert_number(long int num, int base, int flags)
 {
-static char buffer[50];
-char sign = 0;
-char *ptr;
-unsigned long n = num;
-char *array = (flags & CONVERT_LOWERCASE) ? "0123456789abcdef" : "0123456789ABCDEF";
+	static char buffer[50];
+	char sign = 0;
+	char *ptr;
+	unsigned long n = num;
+	char *array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
 
-if (!(flags & CONVERT_UNSIGNED) && num < 0)
-{
-n = (unsigned long)(-num);
-sign = '-';
-}
+	if (!(flags & CONVERT_UNSIGNED) && num < 0)
+	{
+		n = (-num);
+		sign = '-';
+	}
 
-ptr = &buffer[49];
-*ptr = '\0';
+	ptr = &buffer[49];
+	*ptr = '\0';
 
-do {
-*--ptr = array[n % base];
-n /= base;
-} while (n != 0);
+	do {
+		*--ptr = array[n % base];
+		n /= base;
+	} while (n != 0);
 
-if (sign)
-*--ptr = sign;
+	if (sign)
+		*--ptr = sign;
 
-return (ptr);
+	return (ptr);
 }
 /**
  * remove_comments- this function replaces the first occurence of a char in str
@@ -118,15 +125,15 @@ return (ptr);
  */
 void remove_comments(char *buf)
 {
-int i;
+	int a;
 
-for (i = 0; buf[i] != '\0'; i++)
-{
-if (buf[i] == '#' && (!i || buf[i - 1] == ' '))
-{
-buf[i] = '\0';
-break;
-}
-}
+	for (a = 0; buf[a] != '\0'; a++)
+	{
+		if (buf[a] == '#' && (!a || buf[a - 1] == ' '))
+		{
+			buf[a] = '\0';
+			break;
+		}
+	}
 }
 

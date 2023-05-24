@@ -8,8 +8,8 @@
  */
 ssize_t input_buf(info_t *info, char **buf, size_t *len)
 {
-	ssize_t r = 0;
-	size_t len_p = 0;
+	size_t length = 0;
+	ssize_t a = 0;
 
 	if (!*len)
 	{
@@ -17,23 +17,28 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 		*buf = NULL;
 		signal(SIGINT, sigintHandler);
 #if USE_GETLINE
-	r = getline(buf, &len_p, stdin);
+	r = getline(buf, &length, stdin);
 #else
-	r = _getline(info, buf, &len_p);
+	r = _getline(info, buf, &length);
 #endif
-	if (r > 0)
+	if (a > 0)
 	{
-		if ((*buf)[r - 1] == '\n')
+		if ((*buf)[a - 1] == '\n')
 		{
-			(*buf)[r - 1] = '\0';
-			r--;
+			(*buf)[a - 1] = '\0';
+			a--;
 		}
 		info->linecount_flag = 1;
 		remove_comments(*buf);
 		build_history_list(info, *buf, info->histcount++);
+		if (_strchr(buf, ';'))
+		{
+			*len =a;
+			info->cmd_buf = buf;
+		}
 	}
 	}
-	return (r);
+	return (a);
 }
 /**
  * get_input - this function gets a line of input from user
@@ -42,40 +47,40 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
  */
 ssize_t get_input(info_t *info)
 {
+	static size_t a, j, len;
+	ssize_t b = 0;
+	char **buff = &(info->arg), *p;
 	static char *buf;
-	static size_t i, j, len;
-	ssize_t r = 0;
-	char **buf_p = &(info->arg), *p;
 
 	_putchar(BUF_FLUSH);
-	r = input_buf(info, &buf, &len);
-	if (r == -1)
+	b = input_buf(info, &buf, &len);
+	if (b == -1)
 		return (-1);
 	if (len)
 	{
-		j = i;
-		p = buf + i;
+		j = a;
+		p = buf + a;
 
-		check_chain(info, buf, &j, i, len);
+		check_chain(info, buf, &j, a, len);
 		while (j < len)
 		{
 			if (is_chain(info, buf, &j))
-			break;
+				break;
 			j++;
 		}
 
-		i = j + 1;
-		if (i >= len)
+		a = j + 1;
+		if (a >= len)
 		{
-			i = len = 0;
+			a = len = 0;
 			info->cmd_buf_type = CMD_NORM;
 		}
 
-		*buf_p = p;
+		*buff = p;
 		return (_strlen(p));
 	}
-	*buf_p = buf;
-	return (r);
+	*buff = buf;
+	return (b);
 }
 /**
  * read_buf - this function reads a buffer from file descriptor
@@ -86,14 +91,14 @@ ssize_t get_input(info_t *info)
  */
 ssize_t read_buf(info_t *info, char *buf, size_t *i)
 {
-	ssize_t r = 0;
+	ssize_t a = 0;
 
 	if (*i)
 		return (0);
-	r = read(info->readfd, buf, READ_BUF_SIZE);
-	if (r >= 0)
-	*i = r;
-	return (r);
+	a = read(info->readfd, buf, READ_BUF_SIZE);
+	if (a >= 0)
+	*i = a;
+	return (a);
 }
 /**
  * _getline - this function gets the next line of input from STDIN
@@ -104,11 +109,11 @@ ssize_t read_buf(info_t *info, char *buf, size_t *i)
  */
 int _getline(info_t *info, char **ptr, size_t *length)
 {
+	ssize_t a = 0, s = 0;
 	static char buf[READ_BUF_SIZE];
 	static size_t i, len;
-	size_t k;
-	ssize_t r = 0, s = 0;
 	char *p = NULL, *new_p = NULL, *c;
+	size_t k;
 
 	p = *ptr;
 	if (p && length)
@@ -117,7 +122,7 @@ int _getline(info_t *info, char **ptr, size_t *length)
 		i = len = 0;
 
 	r = read_buf(info, buf, &len);
-	if (r == -1 || (r == 0 && len == 0))
+	if (a == -1 || (a == 0 && len == 0))
 		return (-1);
 
 	c = _strchr(buf + i, '\n');
