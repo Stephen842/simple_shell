@@ -2,18 +2,17 @@
 
 /**
  * list_len - this function determines length of linked list
- * @head: parameter showing the pointer to first node
+ * @h: parameter showing the pointer to first node
  * Return: 0 if successful
  */
-size_t list_len(const list_t *head)
+size_t list_len(const list_t *h)
 {
 	size_t len = 0;
-	const list_t *node = head;
 
-	while (node != NULL)
+	while (h)
 	{
+		h = h->next;
 		len++;
-		node = node->next;
 	}
 
 	return (len);
@@ -28,59 +27,57 @@ size_t list_len(const list_t *head)
 
 char **list_to_strings(list_t *head)
 {
-	size_t len = list_len(head);
-	char **strs = NULL;
+	char **strs;
 	list_t *node = head;
-	size_t i = 0;
+	size_t a = list_len(head);
+	char *str;
+	size_t b;
 
-	if (len == 0)
+	if (!head || !a)
 		return (NULL);
-
-	strs = malloc(sizeof(char *) * (len + 1));
-	if (strs == NULL)
+	strs = malloc(sizeof(char *) * (a + 1));
+	if (!strs)
 		return (NULL);
-
-	while (node != NULL)
+	for (a = 0; node; node = node->next, a++)
 	{
-		strs[i] = _strdup(node->str);
-		if (strs[i] == NULL)
+		str = malloc(_strlen(node->str) + 1);
+		if (!str)
 		{
-			while (i > 0)
-				free(strs[--i]);
+			for (b = 0; b < a; b++)
+				free(strs[b]);
 			free(strs);
 			return (NULL);
 		}
 
-		node = node->next;
-		i++;
+		str = _strcpy(str, node->str);
+		strs[a] = str;
 	}
-
-	strs[i] = NULL;
+	strs[a] = NULL;
 	return (strs);
 }
+
 /**
  * print_list - this function prints all elements of a list_t linked list
- * @head: function parameter indicating the pointer to first node
+ * @h: function parameter indicating the pointer to first node
  * Return: 0 if successful
  */
 
-size_t print_list(const list_t *head)
+size_t print_list(const list_t *h)
 {
-	size_t len = list_len(head);
-	const list_t *node = head;
-	size_t i;
+	size_t a;
 
-	for (i = 0; i < len; i++)
+	while (h)
 	{
-		_puts(convert_number(node->num, 10, 0));
+		_puts(convert_number(h->num, 10, 0));
 		_putchar(':');
 		_putchar(' ');
-		_puts(node->str ? node->str : "(nil)");
+		_puts(h->str ? h->str : "(nil)");
 		_puts("\n");
-		node = node->next;
+		h = h->next;
+		a++;
 	}
 
-	return (len);
+	return (a);
 }
 
 /**
@@ -94,17 +91,17 @@ size_t print_list(const list_t *head)
 
 list_t *node_starts_with(list_t *head, char *prefix, char c)
 {
-	list_t *node = head;
+	char *a = NULL;
 
-	while (node != NULL)
+	while (node)
 	{
-		if (starts_with(node->str, prefix) && (c == -1 || node->str[_strlen(prefix)] == c))
-		return (node);
-
+		a = starts_with(node->str, prefix);
+		if (a && ((c == -1) || (*a == c)))
+			return (node);
 		node = node->next;
 	}
-
 	return (NULL);
+
 }
 
 /**
