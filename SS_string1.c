@@ -7,14 +7,18 @@
  */
 char *_strcpy(char *dest, char *src)
 {
-char *ret = dest;
+	int a = 0;
 
-if (dest == src || src == NULL)
-return (dest);
+	if (dest == src || src == 0)
+		return (dest);
+	while (src[a])
+	{
+		dest[a] = src[a];
+		a++;
+	}
+	dest[a] = 0;
+	return (dest);
 
-while ((*dest++ = *src++))
-;
-return (ret);
 }
 
 /**
@@ -25,20 +29,20 @@ return (ret);
  */
 char *_strdup(const char *str)
 {
-int length = 0;
-char *ret;
+	char *a;
+	int len = 0;
 
-if (str == NULL)
-return (NULL);
-while (str[length])
-length++;
+	if (str == NULL)
+		return (NULL);
+	while (*str++)
+		len++;
+	a = malloc(sizeof(char) * (len + 1));
+	if (!a)
+		return (NULL);
+	for (len++; len--;)
+		a[len] = *--str;
+	return (a);
 
-ret = malloc(sizeof(char) * (length + 1));
-if (ret == NULL)
-return (NULL);
-
-_strcpy(ret, (char *)str);
-return (ret);
 }
 
 /**
@@ -48,10 +52,16 @@ return (ret);
  */
 void _puts(char *str)
 {
-if (str == NULL)
-return;
-while (*str)
-putchar(*str++);
+	int a = 0;
+
+	if (!str)
+		return;
+	while (str[a] != '\0')
+	{
+		_putchar(str[a]);
+		a++;
+	}
+
 }
 
 /**
@@ -61,6 +71,17 @@ putchar(*str++);
  */
 int _putchar(char c)
 {
-return (putchar(c));
+	static char b[WRITE_BUF_SIZE];
+	static int a;
+
+	if (c == BUF_FLUSH || a >= WRITE_BUF_SIZE)
+	{
+		write(1, b, a);
+		a = 0;
+	}
+	if (c != BUF_FLUSH)
+		b[a++] = c;
+	return (1);
+
 }
 
